@@ -2,7 +2,7 @@ const express = require('express');
 
 const { createCategory } = require('../controllers/category');
 const { requireSignin, isAdmin, isAuth } = require('../controllers/auth');
-const { findById } = require('../controllers/user');
+const { userById } = require('../controllers/user');
 
 const router = express.Router();
 
@@ -16,6 +16,6 @@ router.post(
 );
 
 // middleware
-router.param('userId', findById);
+router.param('userId', userById);
 
 module.exports = router;

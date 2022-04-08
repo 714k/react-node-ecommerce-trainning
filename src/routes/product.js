@@ -1,8 +1,14 @@
 const express = require('express');
 
-const { createProduct } = require('../controllers/product');
+const {
+  createProduct,
+  productById,
+  getProductById,
+  updateProductById,
+  deleteProductById,
+} = require('../controllers/product');
 const { requireSignin, isAdmin, isAuth } = require('../controllers/auth');
-const { findById, productById } = require('../controllers/user');
+const { userById } = require('../controllers/user');
 
 const router = express.Router();
 
@@ -14,9 +20,24 @@ router.post(
   isAuth,
   createProduct
 );
+router.get('/product/:productId', getProductById);
+router.put(
+  '/product/update/:productId/:userId',
+  requireSignin,
+  isAdmin,
+  isAuth,
+  updateProductById
+);
+router.delete(
+  '/product/delete/:productId/:userId',
+  requireSignin,
+  isAdmin,
+  isAuth,
+  deleteProductById
+);
 
 // middleware
-router.param('userId', findById);
+router.param('userId', userById);
 router.param('productId', productById);
 
 module.exports = router;

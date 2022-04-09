@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const authRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/category');
@@ -18,6 +19,7 @@ const port = process.env.PORT || 8000;
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
 // Routes middlewares
 app.use('/api', authRoutes);

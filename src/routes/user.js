@@ -2,7 +2,11 @@ const express = require('express');
 const { check, validationResult } = require('express-validator');
 
 const { requireSignin, isAdmin, isAuth } = require('../controllers/auth');
-const { userById } = require('../controllers/user');
+const {
+  userById,
+  getUserById,
+  updateUserById,
+} = require('../controllers/user');
 
 const router = express.Router();
 
@@ -14,6 +18,10 @@ router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
     user: req.profile,
   });
 });
+
+router.get('/user/:userId', requireSignin, isAuth, getUserById);
+
+router.put('/user/:userId', requireSignin, isAuth, updateUserById);
 
 // middleware
 router.param('userId', userById);

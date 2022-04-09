@@ -7,6 +7,8 @@ const {
   getAllProducts,
   getProductsRelatedById,
   getProductsByCategory,
+  getProductsBySearch,
+  getPhotoByProductId,
   updateProductById,
   deleteProductById,
 } = require('../controllers/product');
@@ -23,6 +25,10 @@ router.get('/products', getAllProducts);
 router.get('/products/related/:productId', getProductsRelatedById);
 
 router.get('/products/categories', getProductsByCategory);
+
+router.post('/product/photo/:productId', getPhotoByProductId);
+
+router.post('/products/by/search', getProductsBySearch);
 
 router.post(
   '/product/create/:userId',

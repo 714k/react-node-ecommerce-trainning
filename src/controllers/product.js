@@ -78,6 +78,34 @@ exports.getProductById = (req, res) => {
   return res.status(200).json(req.product);
 };
 
+exports.getAllProducts = (req, res) => {
+  const { query } = req;
+  let order = query.order ? query.order : 'asc';
+  let sortBy = query.sortBy ? query.sortBy : '_id';
+  let limit = query.limit ? query.limit : 50;
+
+  Product.find()
+    .select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((error, products) => {
+      if (error) {
+        return res.status(500).json({
+          error: errorHandler(error),
+        });
+      }
+
+      if (!products) {
+        return res.status(404).json({
+          error: 'Not found products',
+        });
+      }
+
+      res.status(200).json(products);
+    });
+};
+
 exports.updateProductById = (req, res) => {
   let form = new formidable.IncomingForm();
 

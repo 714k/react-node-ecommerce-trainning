@@ -5,6 +5,7 @@ const {
   productById,
   getProductById,
   getAllProducts,
+  getProductsRelatedById,
   updateProductById,
   deleteProductById,
 } = require('../controllers/product');
@@ -17,6 +18,8 @@ const router = express.Router();
 router.get('/product/:productId', getProductById);
 
 router.get('/products', getAllProducts);
+
+router.get('/products/related/:productId', getProductsRelatedById);
 
 router.post(
   '/product/create/:userId',

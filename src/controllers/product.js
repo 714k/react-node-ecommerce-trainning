@@ -106,6 +106,34 @@ exports.getAllProducts = (req, res) => {
     });
 };
 
+/**
+ * It will find products based on the req product category
+ * other products with same category will be returned
+ */
+exports.getProductsRelatedById = (req, res) => {
+  const { query } = req;
+  let limit = query.limit ? query.limit : 10;
+  Product.find({ _id: { $ne: req.product }, category: req.product.category })
+    .limit(limit)
+    .select('-photo')
+    .populate('category', '_id name')
+    .exec((error, products) => {
+      if (error) {
+        return res.status(500).json({
+          error: errorHandler(error),
+        });
+      }
+
+      if (!products) {
+        return res.status(404).json({
+          message: 'Products not founded',
+        });
+      }
+
+      res.status(200).json(products);
+    });
+};
+
 exports.updateProductById = (req, res) => {
   let form = new formidable.IncomingForm();
 

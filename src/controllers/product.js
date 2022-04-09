@@ -134,6 +134,29 @@ exports.getProductsRelatedById = (req, res) => {
     });
 };
 
+/**
+ * Get products by category
+ * @param {*} req
+ * @param {*} res
+ */
+exports.getProductsByCategory = (req, res) => {
+  Product.distinct('category', {}, (error, categories) => {
+    if (error) {
+      return res.status(500).json({
+        error: errorHandler(error),
+      });
+    }
+
+    if (!categories) {
+      return res.status(404).json({
+        message: 'Categories not founded',
+      });
+    }
+
+    res.status(200).json(categories);
+  });
+};
+
 exports.updateProductById = (req, res) => {
   let form = new formidable.IncomingForm();
 

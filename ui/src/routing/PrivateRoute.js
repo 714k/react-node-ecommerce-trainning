@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { logIn } from '../routing/routes';
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <Route

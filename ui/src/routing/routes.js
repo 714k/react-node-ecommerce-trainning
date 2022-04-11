@@ -1,5 +1,6 @@
+const baseURL = '/';
 const logIn = '/login';
 const signUp = '/signup';
-const home = '/';
+const home = '/home';
 
-export { home, logIn, signUp };
+export { baseURL, home, logIn, signUp };

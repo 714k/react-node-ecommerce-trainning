@@ -5,7 +5,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { styled, useTheme } from '@mui/material/styles';
@@ -19,8 +19,7 @@ const Form = styled(FormControl)(({ theme }) => ({
   color: 'white',
   padding: theme.spacing(8, 4),
 
-  '.MuiOutlinedInput-root': {
-    // color: 'red',
+  '.MuiTextField-root': {
     marginBottom: theme.spacing(2),
   },
 }));
@@ -33,11 +32,22 @@ function SignUp() {
     lastName: '',
     email: '',
     password: '',
-    weightRange: '',
+    role: undefined,
     showPassword: false,
-    error: false,
+    errors: [],
     success: false,
   });
+
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    showPassword,
+    errors,
+    success,
+  } = values;
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -54,37 +64,101 @@ function SignUp() {
     event.preventDefault();
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // setValues({ ...values, errors: false });
+
+    submitForm({ firstName, lastName, email, password, role }).then((data) => {
+      if (data.errors) {
+        return setValues({
+          ...values,
+          errors: data.errors,
+          success: false,
+        });
+      }
+
+      if (data.error) {
+        return setValues({ ...values, errors: [data.error], success: false });
+      }
+
+      setValues({
+        ...values,
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: undefined,
+        showPassword: false,
+        errors: [],
+        success: true,
+      });
+    });
+  };
+
+  const submitForm = (dataForm) => {
+    return fetch(`${API_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataForm),
+    })
+      .then((response) => response.json())
+      .catch((errors) => {
+        setValues({ ...values, errors, success: false });
+        console.log({ errors });
+      });
+  };
+
   return (
     <>
       <h2>SignUp</h2>
+      {errors.length > 0 &&
+        errors.map((error, idx) => {
+          return <Alert severity="error">{`${idx}. ${error}`}</Alert>;
+        })}
+
+      {success && (
+        <Alert severity="success">Account created Successfully!</Alert>
+      )}
       <Form variant="outlined" theme={theme}>
         <TextField
           id="outlined-first-name"
           label="First Name"
-          value={values.firstName}
+          value={firstName}
           onChange={handleChange('firstName')}
           placeholder="Enter your first name"
         />
         <TextField
           id="outlined-last-name"
           label="Last Name"
-          value={values.lastName}
+          value={lastName}
           onChange={handleChange('lastName')}
           placeholder="Enter your last name"
         />
         <TextField
           id="outlined-email"
           label="Email"
-          value={values.email}
+          value={email}
           type="email"
           onChange={handleChange('email')}
           placeholder="Enter an email"
         />
         <TextField
+          id="outlined-role"
+          label="Role"
+          value={role}
+          type="text"
+          onChange={handleChange('role')}
+          placeholder="Enter a role"
+        />
+        <TextField
           id="input-with-icon-textfield"
           label="Password"
-          type={values.showPassword ? 'text' : 'password'}
-          value={values.password}
+          type={showPassword ? 'text' : 'password'}
+          value={password}
           onChange={handleChange('password')}
           InputProps={{
             endAdornment: (
@@ -95,7 +169,7 @@ function SignUp() {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             ),
@@ -109,6 +183,7 @@ function SignUp() {
           endIcon={<SendIcon />}
           variant="contained"
           size="large"
+          onClick={handleSubmit}
         >
           Submit
         </LoadingButton>

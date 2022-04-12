@@ -4,7 +4,13 @@ const SALT_WORK_FACTOR = 10;
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      trim: true,
+      require: true,
+      maxlength: 32,
+    },
+    lastName: {
       type: String,
       trim: true,
       require: true,
@@ -25,8 +31,9 @@ const UserSchema = new mongoose.Schema(
       require: true,
     },
     role: {
-      type: Number,
-      default: 0,
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
     },
     history: {
       type: Array,

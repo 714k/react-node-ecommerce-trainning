@@ -61,7 +61,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function DrawerNavigation({ open, onClose }) {
+function DrawerNavigation({ open, onClose }) {
   const theme = useTheme();
 
   return (
@@ -126,3 +126,5 @@ export default function DrawerNavigation({ open, onClose }) {
     </Drawer>
   );
 }
+
+export default DrawerNavigation;

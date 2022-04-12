@@ -11,7 +11,7 @@ const Content = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '100vh',
   // backgroundColor: '#192428',
-  color: '#cef2ff',
+  color: theme.palette.primary.main,
   padding: theme.spacing(8, 4),
 }));
 

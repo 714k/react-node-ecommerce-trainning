@@ -11,6 +11,7 @@ exports.signup = (req, res) => {
 
   user.save((error, user) => {
     if (error) {
+      console.log({ error });
       return res.status(400).json({
         error: errorHandler(error),
       });
@@ -28,8 +29,6 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   // find user based on email
   const { email: emailUser, password } = req.body;
-  console.log('emailUser:', emailUser);
-  console.log('password:', password);
 
   User.findOne({ email: emailUser }, async (error, user) => {
     if (error || !user) {

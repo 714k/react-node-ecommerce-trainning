@@ -11,7 +11,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { styled, useTheme } from '@mui/material/styles';
 
 import { signUp } from '../api';
-import { API_URL } from '../config';
 
 const Form = styled(FormControl)(({ theme }) => ({
   width: '100%',

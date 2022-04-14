@@ -10,6 +10,7 @@ import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { styled, useTheme } from '@mui/material/styles';
 
+import { signUp } from '../api';
 import { API_URL } from '../config';
 
 const Form = styled(FormControl)(({ theme }) => ({
@@ -26,7 +27,6 @@ const Form = styled(FormControl)(({ theme }) => ({
 
 function SignUp() {
   const theme = useTheme();
-
   const [values, setValues] = React.useState({
     firstName: '',
     lastName: '',
@@ -67,19 +67,17 @@ function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // setValues({ ...values, errors: false });
+    signUp({ firstName, lastName, email, password, role }).then((data) => {
+      if (data.error) {
+        return setValues({ ...values, errors: [data.error], success: false });
+      }
 
-    submitForm({ firstName, lastName, email, password, role }).then((data) => {
       if (data.errors) {
         return setValues({
           ...values,
           errors: data.errors,
           success: false,
         });
-      }
-
-      if (data.error) {
-        return setValues({ ...values, errors: [data.error], success: false });
       }
 
       setValues({
@@ -94,22 +92,6 @@ function SignUp() {
         success: true,
       });
     });
-  };
-
-  const submitForm = (dataForm) => {
-    return fetch(`${API_URL}/signup`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataForm),
-    })
-      .then((response) => response.json())
-      .catch((errors) => {
-        setValues({ ...values, errors, success: false });
-        console.log({ errors });
-      });
   };
 
   return (

@@ -16,6 +16,20 @@ function login(userData) {
       return error.response.data;
     });
 }
+/**
+ * Logout users
+ * @return logout user message
+ */
+function logout() {
+  return axios
+    .get(`${API_URL}/logout`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+}
 
 /**
  * Sign up for new user
@@ -33,4 +47,4 @@ function signUp(signupData) {
     });
 }
 
-export { login, signUp };
+export { login, logout, signUp };

@@ -1,4 +1,4 @@
-function getLocalStorage(key) {
+function getItem(key) {
   try {
     const serializedItem = localStorage.getItem(key);
 
@@ -8,7 +8,7 @@ function getLocalStorage(key) {
   }
 }
 
-function setLocalStorage(key, value) {
+function setItem(key, value) {
   try {
     const serializedValue = JSON.stringify(value);
 
@@ -18,4 +18,12 @@ function setLocalStorage(key, value) {
   }
 }
 
-export { getLocalStorage, setLocalStorage };
+function removeItem(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    return false;
+  }
+}
+
+export { getItem, setItem, removeItem };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -11,6 +12,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import LogoutIcon from '@mui/icons-material/Logout';
+
+import { logout } from '../../api';
+import { removeItem } from '../../persistence/localStorage';
 
 const drawerWidth = 240;
 
@@ -63,6 +68,17 @@ const Drawer = styled(MuiDrawer, {
 
 function DrawerNavigation({ open, onClose }) {
   const theme = useTheme();
+  const history = useHistory();
+
+  const handleClick = (prop) => (event) => {
+    event.preventDefault();
+
+    if (prop === 'logout') {
+      logout();
+      removeItem('jwt');
+      history.push('/login');
+    }
+  };
 
   return (
     <Drawer variant="permanent" open={open}>
@@ -101,7 +117,7 @@ function DrawerNavigation({ open, onClose }) {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['logout'].map((text, index) => (
           <ListItemButton
             key={text}
             sx={{
@@ -109,6 +125,7 @@ function DrawerNavigation({ open, onClose }) {
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,
             }}
+            onClick={handleClick('logout')}
           >
             <ListItemIcon
               sx={{
@@ -117,7 +134,7 @@ function DrawerNavigation({ open, onClose }) {
                 justifyContent: 'center',
               }}
             >
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {text === 'logout' && <LogoutIcon />}
             </ListItemIcon>
             <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>

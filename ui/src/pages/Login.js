@@ -12,7 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { styled, useTheme } from '@mui/material/styles';
 
 import { login } from '../api';
-import { setLocalStorage } from '../persistence/localStorage';
+import { setItem } from '../persistence/localStorage';
 
 const Form = styled(FormControl)(({ theme }) => ({
   width: '100%',
@@ -81,7 +81,7 @@ function Login() {
         redirect: true,
       });
 
-      setLocalStorage('jwt', response.data);
+      setItem('jwt', response.data);
     });
   };
 

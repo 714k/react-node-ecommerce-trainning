@@ -12,6 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { styled, useTheme } from '@mui/material/styles';
 
 import { login } from '../api';
+import { setLocalStorage } from '../persistence/localStorage';
 
 const Form = styled(FormControl)(({ theme }) => ({
   width: '100%',
@@ -57,15 +58,19 @@ function Login() {
     event.preventDefault();
     setValues({ ...values, loading: true });
 
-    login({ email, password }).then((data) => {
-      if (data.error) {
-        return setValues({ ...values, errors: [data.error], loading: false });
-      }
-
-      if (data.errors) {
+    login({ email, password }).then((response) => {
+      if (response.error) {
         return setValues({
           ...values,
-          errors: data.errors,
+          errors: [response.error],
+          loading: false,
+        });
+      }
+
+      if (response.errors) {
+        return setValues({
+          ...values,
+          errors: response.errors,
           loading: false,
         });
       }
@@ -75,6 +80,8 @@ function Login() {
         loading: false,
         redirect: true,
       });
+
+      setLocalStorage('jwt', response.data);
     });
   };
 
